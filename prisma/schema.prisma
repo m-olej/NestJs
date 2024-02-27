@@ -13,16 +13,21 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+
 model User {
   id Int @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  email String 
+  email String @unique
   hash String
   // ? means optional
   firstName String?
   lastName String?
+
+  @@map("users")
+
+  bookmarks BookMark[]
 }
 
 model BookMark {
@@ -33,4 +38,9 @@ model BookMark {
   title String
   description String?
   link String
+
+  userId Int
+  user User @relation(fields: [userId], references: [id])
+
+  @@map("bookmarks")
 }
